@@ -5,7 +5,7 @@
                 <img src="../../assets/img/logo_index.png" alt="">
             </div>
             <!-- 登陆表单 表单容器-->
-            <el-form style="margin-top: 30px" :model="loginForm" :rules="loginRules">
+            <el-form ref="myForm" style="margin-top: 30px" :model="loginForm" :rules="loginRules">
                <el-form-item prop="mobile">
                    <el-input v-model="loginForm.mobile" placeHolder="请输入手机号"></el-input>
                </el-form-item>
@@ -17,7 +17,7 @@
                    <el-checkbox v-model="loginForm.check">我已阅读并同意用户协议和隐私条款</el-checkbox>
                </el-form-item>
                <el-form-item>
-                   <el-button type="primary" style="width: 100%">登录</el-button>
+                   <el-button @click="submitLogin" type="primary" style="width: 100%">登录</el-button>
                </el-form-item>
             </el-form>
         </el-card>
@@ -34,8 +34,27 @@ export default {
         check: false
       },
       loginRules: {
-
+        mobile: [{ required: true, message: '请输入您的手机号' },
+          { pattern: /^1[3456789]\d{9}$/, message: '请输入合法的手机号' }],
+        code: [{ required: true, message: '请输入您的验证码' },
+          { pattern: /^\d{6}$/, message: '验证码为6位数字' }],
+        check: [{ validator: function (rule, value, callback) {
+          if (value) {
+            callback()
+          } else {
+            callback(new Error('您必须无条件同意被我们坑'))
+          }
+        } }]
       }
+    }
+  },
+  methods: {
+    submitLogin () {
+      this.$refs.myForm.validate(function (isOK) {
+        if (isOK) {
+          console.log('前端校验成功,发送用户名和密码到后台去校验')
+        }
+      })
     }
   }
 }
