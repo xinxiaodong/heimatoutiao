@@ -1,6 +1,6 @@
 <template>
-    <div>
-        主页
+    <div class="login">
+        <span>主页</span>
     </div>
 </template>
 
@@ -9,4 +9,5 @@ export default {
 }
 </script>
 <style>
+
 </style>
