@@ -11,7 +11,7 @@
                </el-form-item>
                <el-form-item prop="code">
                    <el-input v-model="loginForm.code" style="width: 65%;" placeHolder="请输入验证码"></el-input>
-                   <el-button style="float: right" plain></el-button>
+                   <el-button style="float: right" plain>发送验证码</el-button>
                </el-form-item>
                <el-form-item prop="check">
                    <el-checkbox v-model="loginForm.check">我已阅读并同意用户协议和隐私条款</el-checkbox>
