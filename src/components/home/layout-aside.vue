@@ -9,7 +9,7 @@
         首页
     </el-menu-item>
     <!-- 二级导航 -->
-    <el-submenu>
+    <el-submenu index="2">
         <!-- 具名插槽 -->
         <span slot='title'>内容管理</span>
         <!-- 放置 el-menu-item -->
@@ -18,7 +18,7 @@
         <el-menu-item>评论列表</el-menu-item>
         <el-menu-item>素材管理</el-menu-item>
     </el-submenu>
-    <el-submenu>
+    <el-submenu index="2">
         <span slot='title'>粉丝管理</span>
         <el-menu-item>图文数据</el-menu-item>
         <el-menu-item>粉丝画像</el-menu-item>
