@@ -38,6 +38,7 @@ export default {
 </script>
 <style scoped>
     .layout-aside{
+        overflow: hidden;
         width: 230px;
     }
    .title{
