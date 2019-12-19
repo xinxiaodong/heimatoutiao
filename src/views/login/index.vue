@@ -25,6 +25,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     return {
@@ -50,9 +51,18 @@ export default {
   },
   methods: {
     submitLogin () {
-      this.$refs.myForm.validate(function (isOK) {
+      this.$refs.myForm.validate((isOK) => {
         if (isOK) {
-          console.log('前端校验成功,发送用户名和密码到后台去校验')
+          this.$axios({
+            url: '/authorizations', // 请求地址
+            method: 'post',
+            data: this.loginForm
+          }).then(result => {
+            window.localStorage.setItem('user-token', result.data.data.token) // 令牌
+            // 成功以后才会进入到then
+          }).catch(error => {
+            console.log(error)
+          })
         }
       })
     }
