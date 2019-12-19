@@ -59,9 +59,13 @@ export default {
             data: this.loginForm
           }).then(result => {
             window.localStorage.setItem('user-token', result.data.data.token) // 令牌
+            this.$router.push('/home') // 跳转到主页
             // 成功以后才会进入到then
-          }).catch(error => {
-            console.log(error)
+          }).catch(() => {
+            this.$message({
+              message: '您的手机号或验证码不正确',
+              type: 'warning'
+            })
           })
         }
       })
