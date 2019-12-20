@@ -1,7 +1,7 @@
 <template>
    <el-container>
        <!-- 左右布局 -->
-    <el-aside style="background-color:  #353b4e;height: 100vh; width: 230px;">
+    <el-aside style="background-color:  #353b4e;min-height: 100vh; width: 230px;">
         <layout-aside></layout-aside>
     </el-aside>
        <!-- 放置container -->
@@ -11,7 +11,7 @@
           <!-- 头部组件 -->
         <layout-header></layout-header>
       </el-header>
-      <el-main>
+      <el-main style="padding: 0px">
           <!-- 二级路由容器 -->
           <router-view></router-view>
       </el-main>
