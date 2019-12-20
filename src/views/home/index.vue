@@ -12,7 +12,8 @@
         <layout-header></layout-header>
       </el-header>
       <el-main>
-          主体
+          <!-- 二级路由容器 -->
+          <router-view></router-view>
       </el-main>
        </el-container>
    </el-container>
