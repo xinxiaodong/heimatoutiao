@@ -14,7 +14,6 @@ axios.interceptors.request.use(function (config) {
   // 执行请求失败
 })
 // 响应拦截
-console.log(axios.interceptors.response)
 axios.interceptors.response.use(function (response) {
   // 成功时执行
   return response.data ? response.data : {} // 解决当data不存在时 then中读取数据报错问题
