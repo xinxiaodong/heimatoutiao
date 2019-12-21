@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       userInfo: {}, // 用户信息
-      defaultImg: require('../../assets/img/305222.jpg') // 先把地址转换称变量
+      defaultImg: require('../../assets/img/313400.jpg') // 先把地址转换称变量
     }
   },
   created () {

@@ -10,7 +10,7 @@ export default {
 </script>
 <style scoped>
     .home {
-        background-image: url('../../assets/img/305222.jpg');
+        background-image: url('../../assets/img/313400.jpg');
         height: 100vh;
         background-size: cover;
     }
