@@ -35,9 +35,8 @@ export default {
     // 查询数据
     this.$axios({
       url: '/user/profile'
-
     }).then(result => {
-      this.userInfo = result.data.data // 获取用户个人信息
+      this.userInfo = result.data // 获取用户个人信息
     })
   },
   methods: {
@@ -45,6 +44,8 @@ export default {
       if (command === 'lgout') {
         window.localStorage.removeItem('user-token') // 删除用户的令牌
         this.$router.push('/login')
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/xinxiaodong/heimatoutiao'
       }
     }
   }
