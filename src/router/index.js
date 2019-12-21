@@ -11,15 +11,21 @@ const routes = [
     redirect: '/home'
   },
   {
+    // 主页
     path: '/home',
     name: 'home',
     component: Home,
     children: [{
       path: '',
       component: Home2
+    }, {
+      // 二级路由表
+      path: '/home/comment',
+      component: () => import('../views/comment/index.vue')
     }]
   },
   {
+    // 登录页
     path: '/login',
     component: Login
   }
