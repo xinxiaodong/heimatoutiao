@@ -23,7 +23,7 @@ axios.interceptors.response.use(function (response) {
   let message = '未知错误' // 提示信息
   switch (status) {
     case 400:
-      message = '手机号或者验证码错误'
+      message = '请求参数错误'
       break
     case 403:
       window.localStorage.removeItem('user-token') // 强制删除token
@@ -43,5 +43,7 @@ axios.interceptors.response.use(function (response) {
       break
   }
   Message({ type: 'warning', message }) // 提示信息
+  // 状态码提示
+  return Promise.reject(error)
 })
 export default axios // 导出axios
