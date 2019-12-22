@@ -1,7 +1,7 @@
 <template>
   <!-- 卡片组件 -->
 
-  <el-card>
+  <el-card v-loading="loading">
     <bread-crumb slot="header">
       <!-- 插槽内容 -->
       <template slot="title">评论列表</template>
@@ -36,6 +36,7 @@
 export default {
   data () {
     return {
+      loading: false, // 加载状态 默认关闭
       list: [],
       page: {
         // 专门放置分页数据
@@ -54,6 +55,7 @@ export default {
     },
     //   请求评论列表数据
     getComment () {
+      this.loading = true // 打开状态
       // axios 默认是get类型
       this.$axios({
         url: '/articles',
@@ -61,6 +63,7 @@ export default {
       }).then(result => {
         this.list = result.data.results // 获取评论数据给本身data
         this.page.total = result.data.total_count // 获取文章总条数
+        this.loading = false
       })
     },
     // 定义一个布尔值转化方法
