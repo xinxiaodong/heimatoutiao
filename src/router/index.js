@@ -22,6 +22,9 @@ const routes = [
       // 二级路由表
       path: '/home/comment',
       component: () => import('../views/comment/index.vue')
+    }, {
+      path: 'material',
+      component: () => import('../views/material') // 按需加载
     }]
   },
   {
