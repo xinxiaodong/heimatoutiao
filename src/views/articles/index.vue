@@ -5,7 +5,7 @@
         </bread-crumb>
         <!-- el-row 行 -->
         <el-row class="searchTool">
-            <el-col :span="2" value>
+            <el-col :span="2">
                 <span>文章状态</span>
             </el-col>
             <el-col :span="18">
@@ -23,14 +23,14 @@
                 <span>频道列表</span>
             </el-col>
             <el-col :span="18">
-                <el-select v-model="formData.channel_id " value>
+                <el-select v-model="formData.channel_id" value>
                     <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-col>
         </el-row>
         <el-row class="searchTool">
             <el-col :span="2">
-                <span>时间列表</span>
+                <span>时间选择</span>
             </el-col>
             <el-col :span="18">
                 <el-date-picker v-model="formData.dateRange" type="daterange" range-separator="-"
@@ -43,15 +43,15 @@
             <span>共找到1000</span>
         </el-row>
         <!-- 循环的模版 -->
-        <el-row v-for="item in 100" :key="item" class="article-item" type="flex" justify="space-between">
+        <el-row v-for="item in list" :key="item.id.toString()" class="article-item" type="flex" justify="space-between">
             <!-- 左侧 -->
             <el-col :span="14">
                 <el-row type="flex">
-                    <img src="../../assets//img//404.png" alt="">
+                    <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt="">
                     <div class="info">
-                        <span>niaho</span>
-                        <el-tag class="tag">标签一</el-tag>
-                        <p class="date">shijain</p>
+                        <span>{{item.title}}</span>
+                        <el-tag :type="item.status | filterType" class="tag">{{item.status | filterStatus}}</el-tag>
+                        <span class="date">{{item.pubdate}}</span>
                     </div>
                 </el-row>
             </el-col>
@@ -76,20 +76,63 @@ export default {
         dateRange: []
       },
       channels: [], // 定义一个channels接受频道
-      value: ''
+      list: [], // 接受文章列表数据
+      defaultImg: require('../../assets/img/305222.jpg')
+    }
+  },
+  filters: {
+    // 处理显示状态
+    filterStatus (value) {
+      // value 是过滤器前面表达式计算得到的值
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        default:
+          break
+      }
+    },
+    filterType (val) {
+      // value 是过滤器前面表达式计算得到的值
+      switch (val) {
+        case 0:
+          return 'waring'
+        case 1:
+          return 'info'
+        case 2:
+          return ''
+        case 3:
+          return 'danger'
+        default:
+          break
+      }
     }
   },
   methods: {
     getChannels () {
       this.$axios({
-        url: 'channels'
+        url: '/channels'
       }).then(result => {
         this.channels = result.data.channels // 获取频道数据
+      })
+    },
+    // 获取文章列表数据
+    getArticles () {
+      this.$axios({
+        url: '/articles'// 请求地址
+      }).then(result => {
+        this.list = result.data.results // 接收文章列表数据
       })
     }
   },
   created () {
     this.getChannels() // 调用获取频道数据
+    this.getArticles() // 调用获取文章数据
   }
 }
 </script>
@@ -104,11 +147,13 @@ export default {
         height: 30px;
         border-bottom: 1px solid #ccc;
     }
-.articles .article-item{
-    margin: 20px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid #f2f3f5;
-}
+
+    .articles .article-item {
+        margin: 20px 0;
+        padding: 10px 0;
+        border-bottom: 1px solid #f2f3f5;
+    }
+
     .article-item img {
         width: 180px;
         height: 100px;
@@ -124,7 +169,7 @@ export default {
     }
 
     .info .tag {
-        max-width: 80px;
+        max-width: 60px;
     }
 
     .info .date {
