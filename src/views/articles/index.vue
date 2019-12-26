@@ -234,8 +234,8 @@ export default {
   }
 
   .right span {
-    margin-left: 10px;
+    margin-left: 8px;
     font-size: 14px;
-    /* cursor: pointer; */
+    cursor: pointer;
   }
 </style>
