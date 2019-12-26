@@ -29,8 +29,11 @@ const routes = [
       path: 'articles',
       component: () => import('../views/articles')
     }, {
-      path: 'publish',
+      path: 'publish/:articleId',
       component: () => import('../views/publish') // 按需加载
+    }, {
+      path: 'publish',
+      component: () => import('../views/publish')
     }]
   },
   {
