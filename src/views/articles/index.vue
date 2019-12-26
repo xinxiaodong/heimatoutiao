@@ -59,7 +59,7 @@
       <el-col :span="6">
         <el-row class="rigth" type="flex" justify="end">
           <span><i class="el-icon-edit"></i>修改</span>
-          <span><i class="el-icon-delete"></i>删除</span>
+          <span @click="delArticle(item.id)"><i class="el-icon-delete"></i>删除</span>
         </el-row>
       </el-col>
     </el-row>
@@ -126,6 +126,24 @@ export default {
     }
   },
   methods: {
+    // 删除文章
+    delArticle (id) {
+      // 所有已发布的文章不可以删除,只有草稿才可以删除
+      this.$confirm('您是否要删除这个文章?').then(() => {
+        // 直接删除
+        this.$axios({
+          method: 'delete',
+          url: `/articles/${id.toString()}`
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除文章成功'
+          })
+          // this.page.currentPage = 1
+          this.getConditionArticle() // 重新调用
+        })
+      })
+    },
     // 改变页码事件
     changePage (newPage) {
       // 赋值当前页码
@@ -216,8 +234,8 @@ export default {
   }
 
   .right span {
-    margin-left: 8px;
+    margin-left: 10px;
     font-size: 14px;
-    cursor: pointer;
+    /* cursor: pointer; */
   }
 </style>
