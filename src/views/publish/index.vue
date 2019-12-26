@@ -21,12 +21,12 @@
     </el-form-item>
     <el-form-item prop="channel_id" label="频道">
         <el-select v-model="formData.channel_id">
-              <el-option v-for="item in channels" :key="item.id" :value="item.value" :label="item.name"></el-option>
+              <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
         </el-select>
     </el-form-item>
     <el-form-item>
-        <el-button @click="publishArticle" type="primary">发布</el-button>
-        <el-button @click="publishArticle">存入草稿</el-button>
+        <el-button @click="publishArticle()" type="primary">发布</el-button>
+        <el-button @click="publishArticle(true)">存入草稿</el-button>
     </el-form-item>
     </el-form>
 </el-card>
@@ -66,10 +66,19 @@ export default {
       })
     },
     // 发布文章
-    publishArticle () {
+    publishArticle (draft) {
       this.$refs.publishForm.validate(function (isOK) {
         if (isOK) {
           // 可以去进行 发布接口调用
+          this.$axios({
+            url: '/articles',
+            method: 'post',
+            params: { draft }, // query参数
+            data: this.formData
+          }).then(() => {
+            // 新增成功去内容列表
+            this.$router.push('/home/articles') // 回到内容列表
+          })
         }
       })
     }
