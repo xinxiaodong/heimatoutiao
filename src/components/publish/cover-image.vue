@@ -1,8 +1,12 @@
 <template>
     <div class="cover-image">
-        <div v-for="(item,index) in list" :key="index" class="cover-item ">
+        <div @click="openDialog(index)" v-for="(item,index) in list" :key="index" class="cover-item ">
         <img :src="item ? item : defaultImg" alt="">
     </div>
+    <el-dialog :visible="dialogVisible" @close="closeDialog">
+      <!-- 选择素材组件 -->
+      <select-image @selectOneImg="receiveImg"></select-image>
+    </el-dialog>
     </div>
 </template>
 
@@ -11,7 +15,25 @@ export default {
   props: ['list'], // 接受属性
   data () {
     return {
-      defaultImg: require('../../assets//img/pic_bg.png') // 将图片变成变量
+      dialogVisible: false, // 控制弹层打开关闭的变量
+      defaultImg: require('../../assets//img/pic_bg.png'), // 将图片变成变量
+      selectIndex: -1 // 默认下标 -1
+    }
+  },
+  methods: {
+    // 接收方法
+    receiveImg (img) {
+      this.$emit('clickOneImg', img, this.selectIndex)
+      this.closeDialog() // 直接关闭弹层
+    },
+    // 打开
+    openDialog (index) {
+      this.selectIndex = index // 记住点击的下标
+      this.dialogVisible = true // 打开弹层
+    },
+    // 关闭
+    closeDialog () {
+      this.dialogVisible = false // 关闭弹层
     }
   }
 }
