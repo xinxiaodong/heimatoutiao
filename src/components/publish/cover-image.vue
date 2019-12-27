@@ -1,14 +1,19 @@
 <template>
     <div class="cover-image">
         <div v-for="(item,index) in list" :key="index" class="cover-item ">
-        <img src="../../assets//img/pic_bg.png" alt="">
+        <img :src="item ? item : defaultImg" alt="">
     </div>
     </div>
 </template>
 
 <script>
 export default {
-  props: ['list'] // 接受属性
+  props: ['list'], // 接受属性
+  data () {
+    return {
+      defaultImg: require('../../assets//img/pic_bg.png') // 将图片变成变量
+    }
+  }
 }
 </script>
 <style scoped>
