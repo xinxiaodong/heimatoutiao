@@ -9,9 +9,9 @@
         <el-input v-model="formData.title" style="width: 60%"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
-        <quill-editor style="height: 400px;" v-model="formData.content" type="textarea" :rows="4"></quill-editor>
+        <quill-editor style="height: 400px;" v-model="formData.content"></quill-editor>
       </el-form-item>
-      <el-form-item prop="type" label="封面" style="margin-top: 100px">
+      <el-form-item prop="type" label="封面" style="margin-top: 140px">
         <el-radio-group  v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
@@ -19,6 +19,8 @@
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- 放置一个封面组件 -->
+      <cover-image :list="formData.cover.images"></cover-image>
       <el-form-item prop="channel_id" label="频道">
         <el-select v-model="formData.channel_id">
           <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
@@ -76,58 +78,59 @@ export default {
     },
     //   // 监控嵌套对象中的值
     'formData.cover.type': function () {
-      if (this.formData.cover.type === 0 | this.formData.cover.type === -1) {
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         this.formData.cover.images = []
       } else if (this.formData.cover.type === 1) {
         this.formData.cover.images = [''] // 单图模式
       } else if (this.formData.cover.type === 3) {
         this.formData.cover.images = ['', '', ''] // 三图模式
       }
+    }
+  },
+  methods: {
+    // 获取频道
+    getChannels () {
+      this.$axios({
+        url: '/channels'
+      }).then(result => {
+        this.channels = result.data.channels
+      })
     },
-    methods: {
-      // 获取频道
-      getChannels () {
-        this.$axios({
-          url: '/channels'
-        }).then(result => {
-          this.channels = result.data.channels
-        })
-      },
-      // 发布文章
-      publishArticle (draft) {
-        this.$refs.publishForm.validate((isOK) => {
-          if (isOK) {
-            let { articleId } = this.$route.params // 回去动态路由参数 articleId已经是字符串
-            this.$axios({
-              method: articleId ? 'put' : 'post',
-              url: articleId ? `/articles/${articleId}` : `/articles`,
-              params: { draft }, // query参数
-              data: this.formData
-            }).then(result => {
-              this.$router.push('/home/articles') // 回到内容列表
-            })
-          }
-        })
-      },
-      // 获取文章详情通过id
-      getArticleById (articleId) {
-        this.$axios({
-          url: `/articles/${articleId}`
-        }).then(result => {
-          this.formData = result.data // 将指定文章数据给data数据
-        })
-      }
+    // 发布文章
+    publishArticle (draft) {
+      this.$refs.publishForm.validate((isOK) => {
+        if (isOK) {
+          let { articleId } = this.$route.params // 回去动态路由参数 articleId已经是字符串
+          this.$axios({
+            method: articleId ? 'put' : 'post',
+            url: articleId ? `/articles/${articleId}` : `/articles`,
+            params: { draft }, // query参数
+            data: this.formData
+          }).then(result => {
+            this.$router.push('/home/articles') // 回到内容列表
+          })
+        }
+      })
     },
-    created () {
-      this.getChannels() // 获取频道数据
-      // 获取id 判断有无id 有id就是修改 没id就是发布
-      let { articleId } = this.$route.params // 回去动态路由参数
-      if (articleId) {
-        articleId && this.getArticleById(articleId) // 获取文章数据
-      }
+    // 获取文章详情通过id
+    getArticleById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data // 将指定文章数据给data数据
+      })
+    }
+  },
+  created () {
+    this.getChannels() // 获取频道数据
+    // 获取id 判断有无id 有id就是修改 没id就是发布
+    let { articleId } = this.$route.params // 回去动态路由参数
+    if (articleId) {
+      articleId && this.getArticleById(articleId) // 获取文章数据
     }
   }
 }
+
 </script>
 <style>
 </style>
