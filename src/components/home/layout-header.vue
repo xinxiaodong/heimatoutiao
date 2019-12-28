@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus.js' // 引入公共实例
 export default {
   data () {
     return {
@@ -33,19 +34,29 @@ export default {
   },
   created () {
     // 查询数据
-    this.$axios({
-      url: '/user/profile'
-    }).then(result => {
-      this.userInfo = result.data // 获取用户个人信息
+    this.getUserInfo()
+    // 实例创建完毕 立刻监听
+    eventBus.$on('updateUserInfoSuccess', () => {
+      // 别人告诉你 他更新了数据 应该立刻处理
+      this.getUserInfo()
     })
   },
   methods: {
+    getUserInfo () {
+      this.$axios({
+        url: '/user/profile'
+      }).then(result => {
+        this.userInfo = result.data // 获取用户个人信息
+      })
+    },
     handle (command) {
       if (command === 'lgout') {
         window.localStorage.removeItem('user-token') // 删除用户的令牌
         this.$router.push('/login')
       } else if (command === 'git') {
         window.location.href = 'https://github.com/xinxiaodong/heimatoutiao'
+      } else if (command === 'info') {
+        this.$router.push('/home/account')
       }
     }
   }

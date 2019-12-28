@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus.js'
 export default {
   data () {
     return {
@@ -90,6 +91,8 @@ export default {
               type: 'success',
               message: '保存信息成功'
             })
+            // 需要更新头部组件 我更新成功了 你也要更新
+            eventBus.$emit('updateUserInfoSuccess') // 触发一个自定义事件
           })
         }
       })
