@@ -24,7 +24,8 @@
     </el-table>
     <!-- 分页组件 -->
     <el-row type="flex" justify="center" align="middle" style="height: 80px">
-      <el-pagination background layout="prev, pager, next" :current-page="page.currentPage" :page-size="page.pageSize" :total="page.total" @current-change="changePage">
+      <el-pagination background layout="prev, pager, next" :current-page="page.currentPage" :page-size="page.pageSize"
+        :total="page.total" @current-change="changePage">
       </el-pagination>
     </el-row>
 
@@ -54,17 +55,16 @@ export default {
       this.getComment()
     },
     //   请求评论列表数据
-    getComment () {
+    async getComment () {
       this.loading = true // 打开状态
       // axios 默认是get类型
-      this.$axios({
+      let result = await this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
-      }).then(result => {
-        this.list = result.data.results // 获取评论数据给本身data
-        this.page.total = result.data.total_count // 获取文章总条数
-        this.loading = false
       })
+      this.list = result.data.results // 获取评论数据给本身data
+      this.page.total = result.data.total_count // 获取文章总条数
+      this.loading = false
     },
     // 定义一个布尔值转化方法
     formatterBool (row, column, cellValue, index) {
@@ -75,29 +75,27 @@ export default {
       return cellValue ? '正常' : '关闭'
     },
     // 打开或者关闭评论方法
-    openOrClose (row) {
+    async openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您是否确定要${mess}评论吗`).then(() => {
-        // 用户确定要调用接口
-        this.$axios({
-          method: 'put',
-          url: '/comments/status',
-          params: {
-            article_id: row.id.toString()
-          },
-          data: {
-            allow_comment: !row.comment_status
-          }
-        }).then(result => {
-          // 打开或者关闭评论成功之后
-          this.$message({
-            type: 'success',
-            message: '操作成功'
-          })
-          // 重新请求列表
-          this.getComment()
-        })
+      await this.$confirm(`您是否确定要${mess}评论吗`)
+      // 用户确定要调用接口
+      await this.$axios({
+        method: 'put',
+        url: '/comments/status',
+        params: {
+          article_id: row.id.toString()
+        },
+        data: {
+          allow_comment: !row.comment_status
+        }
       })
+      // 打开或者关闭评论成功之后
+      this.$message({
+        type: 'success',
+        message: '操作成功'
+      })
+      // 重新请求列表
+      this.getComment()
     }
   },
   created () {

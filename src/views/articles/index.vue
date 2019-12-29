@@ -131,22 +131,20 @@ export default {
       this.$router.push(`/home/publish/${id.toString()}`) // 到发布页面
     },
     // 删除文章
-    delArticle (id) {
+    async delArticle (id) {
       // 所有已发布的文章不可以删除,只有草稿才可以删除
-      this.$confirm('您是否要删除这个文章?').then(() => {
-        // 直接删除
-        this.$axios({
-          method: 'delete',
-          url: `/articles/${id.toString()}`
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除文章成功'
-          })
-          // this.page.currentPage = 1
-          this.getConditionArticle() // 重新调用
-        })
+      await this.$confirm('您是否要删除这个文章?')
+      // 直接删除
+      await this.$axios({
+        method: 'delete',
+        url: `/articles/${id.toString()}`
       })
+      this.$message({
+        type: 'success',
+        message: '删除文章成功'
+      })
+      // this.page.currentPage = 1
+      this.getConditionArticle() // 重新调用
     },
     // 改变页码事件
     changePage (newPage) {
@@ -172,22 +170,21 @@ export default {
       }
       this.getArticles(params)
     },
-    getChannels () {
-      this.$axios({
+    // 获取频道
+    async getChannels () {
+      let result = await this.$axios({
         url: '/channels'
-      }).then(result => {
-        this.channels = result.data.channels // 获取频道数据
       })
+      this.channels = result.data.channels // 获取频道数据
     },
     // 获取文章列表数据
-    getArticles (params) {
-      this.$axios({
+    async getArticles (params) {
+      let result = await this.$axios({
         url: '/articles', // 请求地址
         params
-      }).then(result => {
-        this.list = result.data.results // 接收文章列表数据
-        this.page.total = result.data.total_count // 文章总数
       })
+      this.list = result.data.results // 接收文章列表数据
+      this.page.total = result.data.total_count // 文章总数
     }
   },
   created () {
