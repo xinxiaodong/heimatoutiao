@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import { getArticles, getChannels } from '../../actions/articles.js'
 export default {
   data () {
     return {
@@ -172,17 +173,12 @@ export default {
     },
     // 获取频道
     async getChannels () {
-      let result = await this.$axios({
-        url: '/channels'
-      })
+      let result = await getChannels() // 调用频道数据
       this.channels = result.data.channels // 获取频道数据
     },
     // 获取文章列表数据
     async getArticles (params) {
-      let result = await this.$axios({
-        url: '/articles', // 请求地址
-        params
-      })
+      let result = await getArticles() // 调用模块的请求数据
       this.list = result.data.results // 接收文章列表数据
       this.page.total = result.data.total_count // 文章总数
     }
