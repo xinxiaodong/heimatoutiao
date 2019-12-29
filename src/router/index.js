@@ -11,6 +11,10 @@ const routes = [
     redirect: '/home'
   },
   {
+    path: '*', // 匹配任何地址 但是如果其他的可以匹配 优先匹配其他 否则匹配该组件
+    component: () => import('../views/404') // 配置404页面
+  },
+  {
     // 主页
     path: '/home',
     name: 'home',
@@ -37,7 +41,8 @@ const routes = [
     }, {
       path: 'account',
       component: () => import('../views/account')
-    }]
+    }
+    ]
   },
   {
     // 登录页
